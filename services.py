@@ -11,7 +11,7 @@ class TaskSchema(BaseModel):
 
     model_config = ConfigDict(from_attributes=True)
 
-async def add_iser(tg_id):
+async def add_user(tg_id):
     async with async_session() as session:
         user = await session.scalar(select(User).where(User.tg_id == tg_id))
         if user:
