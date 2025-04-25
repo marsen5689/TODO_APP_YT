@@ -31,8 +31,7 @@ async def get_tasks(user_id):
         serialized_tasks = [TaskSchema.model_validate(t).model_dump() for t in tasks]
         return serialized_tasks 
     
-async def get_completed_tasks(user_id):
+async def get_completed_tasks_count(user_id):
     async with async_session() as session:
-        tasks = await session.scalars(select(func.count(Task.id)).where(Task.completed == True))
-        serialized_tasks = [TaskSchema.model_validate(t).model_dump() for t in tasks]
-        return serialized_tasks
+        count = await session.scalar(select(func.count()).select_from(Task).where(Task.user == user_id, Task.completed == True))
+        return count
